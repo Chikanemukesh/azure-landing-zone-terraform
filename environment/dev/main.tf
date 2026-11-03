@@ -45,10 +45,7 @@ module "vnet_peering" {
 }
 
 module "firewall" {
-  depends_on = [
-    module.virtual_network,
-    module.subnet
-  ]
+  depends_on = [module.virtual_network,module.subnet]
 
   source    = "../../module/firewall"
   firewalls = var.firewalls

@@ -150,8 +150,13 @@ subnets = {
     virtual_network_name = "vnet-landingzone-monitor"
     address_prefixes     = ["10.0.5.0/24"]
   }
+  firewall-subnet = {
+  name                 = "AzureFirewallSubnet"
+  resource_group_name  = "rg-landingzone-network"
+  virtual_network_name = "vnet-landingzone-network"
+  address_prefixes     = ["10.0.6.0/26"]
 }
-
+}
 
 # ==================================================
 # 4. NETWORK SECURITY GROUPS (NSG)
@@ -299,5 +304,14 @@ vnet_peerings = {
     allow_forwarded_traffic      = true
     allow_gateway_transit        = false
     use_remote_gateways          = false
+  }
+}
+firewalls = {
+  firewall1 = {
+    name                = "fw-landingzone"
+    location            = "centralindia" 
+    resource_group_name = "rg-landingzone-network"
+    sku_name            = "AZFW_VNet"
+    sku_tier            = "Standard"  
   }
 }
