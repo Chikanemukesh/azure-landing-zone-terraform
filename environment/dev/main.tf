@@ -39,14 +39,33 @@ module "route_table" {
 }
 
 module "vnet_peering" {
-  depends_on = [module.virtual_network]
+  depends_on    = [module.virtual_network]
   source        = "../../module/vnet_peering"
   vnet_peerings = var.vnet_peerings
 }
 
 module "firewall" {
-  depends_on = [module.virtual_network,module.subnet]
+  depends_on = [module.virtual_network, module.subnet]
 
   source    = "../../module/firewall"
   firewalls = var.firewalls
+}
+
+module "bastion" {
+  depends_on = [module.virtual_network, module.subnet]
+
+  source   = "../../module/azure_bastion"
+  bastions = var.bastions
+}
+
+module "public_ip" {
+  source = "../../module/public_ip"
+
+  public_ips = var.public_ips
+}
+
+module "storage_account" {
+  depends_on = [module.resource_group]
+  source = "../../module/storage_account"
+  storage_accounts = var.storage_accounts
 }

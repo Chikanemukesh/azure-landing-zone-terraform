@@ -6,8 +6,9 @@ variable "firewalls" {
     location             = string
     resource_group_name  = string
     sku_tier             = string
-    subnet_id            = string
-    public_ip_address_id = string
+    subnet_name          = string
+    virtual_network_name = string
+    public_ip_name       = string
     tags                 = map(string)
   }))
 }
