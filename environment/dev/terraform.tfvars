@@ -151,11 +151,11 @@ subnets = {
     address_prefixes     = ["10.0.5.0/24"]
   }
   firewall-subnet = {
-  name                 = "AzureFirewallSubnet"
-  resource_group_name  = "rg-landingzone-network"
-  virtual_network_name = "vnet-landingzone-network"
-  address_prefixes     = ["10.0.6.0/26"]
-}
+    name                 = "AzureFirewallSubnet"
+    resource_group_name  = "rg-landingzone-network"
+    virtual_network_name = "vnet-landingzone-network"
+    address_prefixes     = ["10.0.6.0/26"]
+  }
 }
 
 # ==================================================
@@ -309,9 +309,109 @@ vnet_peerings = {
 firewalls = {
   firewall1 = {
     name                = "fw-landingzone"
-    location            = "centralindia" 
+    location            = "centralindia"
     resource_group_name = "rg-landingzone-network"
-    sku_name            = "AZFW_VNet"
-    sku_tier            = "Standard"  
+    sku_tier            = "Standard"
+
+    subnet_name          = "AzureFirewallSubnet"
+    virtual_network_name = "vnet-landingzone-network"
+    public_ip_name       = "pip-fw-landingzone"
+
+    tags = {
+      Environment = "Dev"
+      Project     = "LandingZone"
+      Owner       = "Mukesh"
+    }
   }
+}
+
+bastions = {
+  bastion1 = {
+    name                 = "bas-landingzone-dev"
+    location             = "centralindia"
+    resource_group_name  = "rg-landingzone-network"
+    virtual_network_name = "vnet-landingzone-network"
+    subnet_prefix        = "10.1.10.0/26"
+    public_ip_name       = "pip-bastion-landingzone"
+    sku                  = "Standard"
+
+    tags = {
+      Environment = "Dev"
+      Project     = "LandingZone"
+      Owner       = "Mukesh"
+    }
+  }
+}
+
+# ==================================================
+# 8. AZURE PUBLIC IP
+# Purpose: Firewall and Bastion ke liye Public IP create karna.
+# ==================================================
+
+public_ips = {
+  firewall1 = {
+    name                = "pip-fw-landingzone"
+    location            = "centralindia"
+    resource_group_name = "rg-landingzone-network"
+
+    allocation_method = "Static"
+    sku               = "Standard"
+    sku_tier          = "Regional"
+    ip_version        = "IPv4"
+
+    tags = {
+      Environment = "Dev"
+      Project     = "LandingZone"
+      Owner       = "Mukesh"
+    }
+  }
+
+  bastion1 = {
+    name                = "pip-bastion-landingzone"
+    location            = "centralindia"
+    resource_group_name = "rg-landingzone-network"
+
+    allocation_method = "Static"
+    sku               = "Standard"
+    sku_tier          = "Regional"
+    ip_version        = "IPv4"
+
+    tags = {
+      Environment = "Dev"
+      Project     = "LandingZone"
+      Owner       = "Mukesh"
+    }
+  }
+}
+
+storage_accounts = {
+  storage_account1 = {
+    name                     = "stg-landingzone-dev"
+    resource_group_name      = "rg-landingzone-storage"
+    location                 = "centralindia"
+    account_tier             = "Standard"
+    account_replication_type = "GRS"
+    tags                     = {
+      Environment = "Dev"
+      Project     = "LandingZone"
+      Owner       = "Mukesh"
+    }
+  }
+  
+  storage_accounts = {
+  storage_account1 = {
+    name                     = "stlzdata001"
+    resource_group_name      = "rg-landingzone-data"
+    location                 = "centralindia"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+
+    tags = {
+      environment = "Dev"
+      project     = "LandingZone"
+      owner       = "Mukesh"
+    }
+  }
+}
+
 }

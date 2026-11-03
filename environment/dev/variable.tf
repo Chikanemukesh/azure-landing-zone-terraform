@@ -58,11 +58,11 @@ variable "route_tables" {
 }
 variable "vnet_peerings" {
   type = map(object({
-    name                          = string
-    resource_group_name           = string
-    virtual_network_name          = string
-    remote_virtual_network_name   = string
-    remote_resource_group_name    = string
+    name                        = string
+    resource_group_name         = string
+    virtual_network_name        = string
+    remote_virtual_network_name = string
+    remote_resource_group_name  = string
 
     allow_virtual_network_access = bool
     allow_forwarded_traffic      = bool
@@ -70,7 +70,6 @@ variable "vnet_peerings" {
     use_remote_gateways          = bool
   }))
 }
-
 variable "firewalls" {
   description = "Map of Azure Firewalls"
 
@@ -79,8 +78,50 @@ variable "firewalls" {
     location             = string
     resource_group_name  = string
     sku_tier             = string
-    subnet_id            = string
-    public_ip_address_id = string
+    subnet_name          = string
+    virtual_network_name = string
+    public_ip_name       = string
     tags                 = map(string)
+  }))
+}
+
+variable "bastions" {
+  type = map(object({
+    name                 = string
+    location             = string
+    resource_group_name  = string
+    virtual_network_name = string
+    subnet_prefix        = string
+    public_ip_name       = string
+    sku                  = string
+    tags                 = map(string)
+  }))
+}
+
+variable "public_ips" {
+  description = "Map of Azure Public IP configurations"
+
+  type = map(object({
+    name                = string
+    location            = string
+    resource_group_name = string
+
+    allocation_method = optional(string, "Static")
+    sku               = optional(string, "Standard")
+    sku_tier          = optional(string, "Regional")
+    ip_version        = optional(string, "IPv4")
+
+    tags = optional(map(string), {})
+  }))
+}
+
+variable "storage_accounts" {
+  type = map(object({
+    name                     = string
+    resource_group_name      = string
+    location                 = string
+    account_tier             = string
+    account_replication_type = string
+    tags                     = map(string)
   }))
 }
